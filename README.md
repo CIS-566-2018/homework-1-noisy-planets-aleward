@@ -1,5 +1,35 @@
 # CIS 566 Project 1: Noisy Planets
 
+
+Name: Alexis Ward
+
+PennKey: aleward
+
+External Links:
+
+- I used the Simplex 3D Noise function from: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83 (Myles told me about this link)
+- I used the following function to help me compute rotation matrices: http://www.neilmendoza.com/glsl-rotation-about-an-arbitrary-axis/
+
+Screenshots: (in repository)
+
+![](ss1.png)
+![](ss2.png)
+![](ss3.png)
+![](ss4.png)
+![](ss5.png)
+![](ss6.png)
+
+Explanation:
+
+My scene is composed of three renderings of the same icosphere. One is used for the moon, one is used for the center planet, and one is used for the clouds surrouding the planet.
+
+I used Simplex noise for almost all effects in this project. For the moon's vertex shader, I sampled the noise at 4 different octaves, sqaure rooted the resulting float multiple times, and set a cut-off value; this resulted in a smooth sphere with many sharp craters. Its fragment shader maps colors to new noise values (as well as noise values sent from the vertex shader), and implements slight Blinn Phong shading sepending on the surface color.  For the planet's vertex shader, I sampled the noise at 6 different octaves, and then cut it off at a value fluctuating between 0 and about 1/15 to make water look as if it's expading and contracting. In it's fragment shader I calculated the noise in different ways for the water, sand, and ground features. The water has a Blinn Phong shine at the brighter stripes to simulate cresting waves, and the ground has darker patches in the light based on Blinn Phong as well. I only use the cloud vertex shader to scale the icosphere, and it's fragment shader uses maps simple noise to semi-transparent surface.
+
+I also computed the deformed normals in both the moon and planet vertex shaders. I approximated hypothetical points on the sphere close to each vertex in question, calculated their deformations, and took the cross product (of the vectors between the vertex and the hypothetical points). Several different cases are laid out in the shader to avoid mathematical error.
+
+Additionally, the planetary motions are all handled in the CPU.
+
+
 ## Objective
 - Continue practicing WebGL and Typescript
 - Experiment with noise functions to procedurally generate the surface of a planet
@@ -38,8 +68,6 @@ experiment with as much as you can!
 For reference, here is a planet made by your TA Dan last year for this
 assignment:
 
-![](danPlanet.png)
-
 Notice how the water has a specular highlight, and how there's a bit of
 atmospheric fog near the horizon of the planet. This planet used only simple
 Fractal Brownian Motion to create its mountainous shapes, but we expect you all
@@ -73,6 +101,6 @@ to recruiters, but it helps us understand your project when we grade it!
 fourth dimension that is updated each frame. A 3D function will work, too, but
 the change in noise will look more "directional" than if you use 4D.
 - Use music to animate aspects of your planet's terrain (e.g. mountain height,
-  brightness of emissive areas, water levels, etc.)
+brightness of emissive areas, water levels, etc.)
 - Create a background for your planet using a raytraced sky box that includes
 things like the sun, stars, or even nebulae.
